@@ -10,6 +10,10 @@ permissions:
   pages: write
   id-token: write
 
+environment:
+  name: uat-environment
+  url: ${{ steps.deployment.outputs.page_url }}
+
 concurrency:
   group: 'pages'
   cancel-in-progress: true
@@ -17,9 +21,6 @@ concurrency:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: uat-environment
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,7 +28,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
           cache: 'npm'
 
       - name: Install dependencies
@@ -42,7 +43,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist/my-ci-cd-app
 
